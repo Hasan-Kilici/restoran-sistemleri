@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="./static/kawethra.js"></script>
+        <script src="./static/script.js"></script>
+        <link rel="stylesheet" href="./static/style.css">   
+        <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.0/css/all.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <title>{{ .title }}</title>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
+    </head>
+    <body>
+        <div id="layout-navbar">
+        </div>
+        <div id="main">
+
+        </div>
+        <div id="layout-footer">
+        </div>
+    {{ if eq .userStatus  "true"}}
+        <script>
+        
+        window.onload = ()=>{
+                Layout()
+            }
+            addRoute("","./components/home.kw","Anasayfa",()=>{
+                Layout()
+            });
+            addRoute("/siparisler","./components/siparisler.kw","Siparişler",()=>{
+                let latestOrderId = null;
+                Layout()
+                setInterval(() => {
+                fetch("/orders/api/for-cheff", {
+                    method: "POST",
+                })
+                    .then(async (data) => {
+                    const orders = await data.json();
+                    for (let i = 0; i < orders.length; i++) {
+                        const order = orders[i];
+                        if (order.ID <= latestOrderId) {
+                        continue;
+                        }
+                        document.getElementById("siparisler").innerHTML += `
+                        <td>${order.FoodName}</td>
+                        <td>
+                            <form method="POST" action="/delete/order/${order.ID}">
+                            <button class="btn btn-danger"><i class="fa-light fa-trash-can"></i></button>
+                            </form>
+                        </td>
+                        `;
+                        latestOrderId = order.ID;
+                    }
+                    })
+                }, 1500);
+            })
+            addRoute("/masa","./components/masa.kw","Masalar",()=>{
+                Layout()
+                let masasiparisleri = 0;
+                let toplamtutar = 0;
+                setTimeout(()=>{
+                    fetch('/foods/api', {
+                            method: 'POST',
+                        }).then(async(data)=>{
+                        let foods = await data.json();
+                        let yemeksayi = foods.length;
+                        setTimeout(()=>{
+                            for(let i = 0;i < yemeksayi;i++){
+                                let yemekadi = foods[i].Name;
+                                yemekadi = yemekadi.replace(/ /g, "-");
+                                document.getElementById("yemekler").innerHTML += `
+                                <div class="col-6">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img src="${foods[i].ImagePath}" style="height:12vh;object-fit: contain;" class="w-100 rounded">
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <h4>${foods[i].Name}</h4> 
+                                                        <b class="text-success">${foods[i].Price}TL</b>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                            <div class="card-footer">
+                                                <form method="POST" action="/add/food/for-table/${params[1]}/${yemekadi}/${foods[i].Price}">
+                                                    <button type="submit" class="btn btn-dark">Masaya ekle</button>
+                                                </form>
+                                            </div>
+                                         </div>`;
+                                            }
+                                        })
+                        });
+                        fetch("/orders/api", {
+                            method: "POST",
+                        }).then(async(data)=>{
+                            let orders = await data.json();
+                            let siparissayi = orders.length;
+                            for(let i = 0;i < siparissayi;i++){
+                                if(orders[i].TableID == params[1]){
+                                    document.getElementById("siparisler").innerHTML += `
+                                        <tr>
+                                            <td>${orders[i].FoodName}</td>
+                                            <td>${orders[i].FoodPrice}</td>
+                                            <td>
+                                                <form method="POST" action="/remove/food/for-table/${orders[i].ID}/${params[1]}">
+                                                    <button type="submit" class="btn btn-danger"><i class="fa-light fa-trash-can"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    masasiparisleri++
+                                    toplamtutar = toplamtutar + orders[i].FoodPrice;
+                                }
+                            }
+                        })
+                },100)
+                setTimeout(()=>{
+                        let action = `/reset/table/${params[1]}/${masasiparisleri}/`;
+                        document.getElementById("sifirlama-formu").setAttribute("action",action);
+                        document.getElementById("tutar").innerHTML = `<b class="text-succsess">${toplamtutar}TL</b>`;
+                },200)
+            });
+
+            function Layout(){
+                fetch('/tables/api', {
+                    method: 'POST',
+                }).then(async(data)=>{
+                    let tables = await data.json();
+                    let masauzunluk = tables.length;
+                    setTimeout(()=>{
+                        for(let i = 0;i < masauzunluk;i++){
+                            document.getElementById("masalar").innerHTML += `
+                            <a href="/#/masa?param=${tables[i].ID}" class="masa" masano="${tables[i].ID}">Masa ${tables[i].ID}</a>
+                            `;
+                        }
+                    },10);
+                })
+                    document.getElementById("layout-navbar").innerHTML = `
+                    <div class="scrollmenu" id="masalar">
+                    </div>
+                    <div class="search">
+                        <center>
+                            <input type="text" id="search" placeholder="Masa Numarası giriniz">
+                            <button class="searchbtn" onclick="ara()"><i class="fa-light fa-magnifying-glass"></i></button>
+                        </center>
+                    </div>`;
+            }
+            </script>
+             <script>
+                    let d = new Date();
+                    let UserPerms = {{.perms}};
+                    let UserAllowedHours = [];
+                    fetch('/perms/api',{
+                        method: 'POST',
+                    }).then(async(data)=>{
+                        let Perms = await data.json();
+                        for(let i = 0;i < Perms.length;i++){
+                            if(UserPerms.length >= (i+1)){
+                                let userPermID = UserPerms[i];
+                                let perm = Perms.find(p => p.ID == userPermID);
+                                if (perm) {
+                                    console.log(perm.Name)
+                                    let Hours = perm.AllowedHours;
+                                    Hours = Hours.split(">");
+                                    UserAllowedHours.push({opened:parseInt(Hours[0]), closed: parseInt(Hours[1])});
+                                    console.log(UserAllowedHours)
+                                }
+                            }
+                        }
+                    })
+                    let durum = false;
+                    setInterval(()=>{
+                        if(!durum){
+                            let hasPermission = false;
+                            for(let i = 0;i < UserAllowedHours.length;i++){
+                                if(UserAllowedHours[i].opened <= d.getHours() && UserAllowedHours[i].closed >= d.getHours()){
+                                    hasPermission = true;
+                                    break;
+                                }
+                            }
+                            if (hasPermission) {
+                                console.log("Giriş yapabilir");
+                            } else {
+                                document.body.innerHTML = `
+                                    <h4>Bu Satten Sonra Giriş Yapamazsınız</h4>
+                                `;
+                                durum = true;
+                            }
+                        }
+                    },1000)
+                </script>
+                <script src="./static/eanreader.js"></script>
+    {{ end }}
+            
+            {{ range $index, $perm := .perms }}
+                {{ if eq $perm "3" }}
+                <script>
+                    addRoute("/yonetici/#/paneli","./components/yoneticipaneli.kw","Yönetici Paneli",async ()=>{
+                        document.getElementById("layout-navbar").innerHTML = `
+                        <a href="/#/yonetici/#/paneli?param=masalar">
+                        Masalar
+                        </a>
+                        <a href="/#/yonetici/#/paneli?param=calisanlar">
+                        Çalışan paneli
+                        </a>
+                        <a href="/#/yonetici/#/paneli?param=yemekler">
+                        Yemekler
+                        </a>
+                        <a href="/#/yonetici/#/paneli?param=yetkili">
+                        Yetkili
+                        </a>
+                        `;
+                        switch(params[1]){
+                            case "masalar":
+                                document.getElementById("main").innerHTML = await kw.readFile("./components/masalaryonetimpaneli.kw");
+                            break;
+                            case "calisanlar":
+                                document.getElementById("main").innerHTML = await kw.readFile("./components/calisanpaneli.kw");
+                            break;
+                            case "istatistik":
+                                document.getElementById("main").innerHTML = await kw.readFile("./components/istatistik.kw");
+                            break;
+                            case "yemekler":
+                                document.getElementById("main").innerHTML = await kw.readFile("./components/yemekler.kw");
+                                setTimeout(()=>{
+                                        fetch('/foods/api', {
+                                            method: 'POST',
+                                        }).then(async(data)=>{
+                                            let foods = await data.json();
+                                            let yemeksayi = foods.length
+                                            setTimeout(()=>{
+                                            for(let i = 0;i < yemeksayi;i++){
+                                                document.getElementById("yemekler").innerHTML += `
+                                                    <div class="col-6">
+                                                    <div class="card mb-3">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                            <div class="col-md-2">
+                                                                <img src="${foods[i].ImagePath}" style="height:12vh;object-fit: contain;" class="w-100 rounded">
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <h4>${foods[i].Name}</h4> 
+                                                                <b class="text-success">${foods[i].Price}TL</b>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        <div class="card-footer">
+                                                            <button class="btn btn-danger">Sil</button>
+                                                            <button class="btn btn-primary">Düzenle</button>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                            }
+                                        },100)
+                                    })
+                                },100)
+                            break;
+                            case "yetkili":
+                                document.getElementById("main").innerHTML = await kw.readFile("./components/yetkiliayarla.kw");
+                            break;
+                        }
+                    })
+                    </script>
+
+                {{end}}
+            {{end}}
+    {{ if eq .userStatus  "false"}}
+            <script>
+                addRoute("","./components/menu.kw","QR Menü", ()=>{
+                    
+                })
+                addRoute("/login","./components/login.kw","Giriş yap",()=>{
+                    console.log("Kullanıcı Bulunamadı");
+                });
+            </script>
+     {{ end }}
+    
+    </body>
+</html>

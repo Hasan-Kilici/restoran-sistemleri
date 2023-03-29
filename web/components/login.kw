@@ -1,0 +1,6 @@
+<h4>Giriş Yap</h4>
+<form method="POST" action="/login">
+    <input type="email" id="email" name="email" required>
+    <input type="password" id="password" name="password" reqired>
+    <input type="submit"> 
+</form>

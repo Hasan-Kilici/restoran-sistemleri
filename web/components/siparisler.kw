@@ -1,0 +1,8 @@
+<div class="container">
+    <table class="table" id="siparisler">
+        <tr>
+            <th class="col-10">Sipariş Edilen Yemek</th>
+            <th class="col-2">Sil</th>
+        </tr>
+    </table>
+</div>

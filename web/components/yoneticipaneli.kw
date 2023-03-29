@@ -1,0 +1,5 @@
+<div class="container">
+<form method="POST" action="/add/table/to-company">
+    <input type="submit" value="masa oluştur">
+</form>
+</div>

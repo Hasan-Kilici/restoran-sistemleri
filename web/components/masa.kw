@@ -1,0 +1,17 @@
+<div class="container mt-5">
+    <h4 class="mt-2 mb-2 d-flex align-items-center"><i class="text-light fa-light fa-bells bg-danger" style="padding:8px;border-radius:50%;margin-right:10px"></i> Siparişler</h4>
+    <table class="table col-12" id="siparisler">
+        <th class="col-8">Ürün</th>
+        <th class="col-2">Fiyat</th>
+        <th class="col-2">Kaldır</th>
+    </table>
+    <div id="tutar" style="text-align:right;padding-right:16px"></div>
+    <form id="sifirlama-formu" method="POST">
+        <input type="submit" class="btn btn-dark mt-4 mb-4" value="Sipariş Ödendi">
+    </form>
+    <h4 class="mt-2 mb-2 d-flex align-items-center"><i class="text-light bg-success fa-light fa-burger-fries" style="padding:8px;border-radius:50%;margin-right:10px"></i> Yemekler</h4>
+    <div id="yemekler" class="row justify-content-stretch">
+
+    </div>
+
+</div>

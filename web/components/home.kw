@@ -1,0 +1,34 @@
+<div class="container mt-5">
+<div class="row">
+    <div class="text-center col-6 col-lg-4 mb-2">
+    <div class="card" style="height:200px">
+            <div onclick="window.location.href = '/#/siparisler'" class="card-body row justify-content-center align-items-center">
+                <span style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:35px;border-radius:50%" class="text-light bg-primary">
+                    <i class="fa-light fa-bell"></i>
+                </span><br><br>
+                <h4>Siparişler</h4>
+            </div>
+        </div>
+    </div>
+    <div class="text-center col-6 col-lg-4 mb-2">
+        <div class="card" onclick="window.location.href = '/#/yonetici/#/paneli'" style="height:200px">
+            <div class="card-body row justify-content-center align-items-center">
+                <span style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:35px;border-radius:50%" class="text-light bg-danger">
+                    <i class="fa-light fa-user-crown"></i>
+                </span><br><br>
+                <h4>Yönetici</h4>
+            </div>
+        </div>
+    </div>
+    <div class="text-center col-12 col-lg-4 mb-2">
+       <div class="card" onclick="window.location.href = '/#/yonetici/#/paneli?param=istatistik'" style="height:200px">
+            <div class="card-body row justify-content-center align-items-center">
+                <span style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:35px;border-radius:50%" class="text-light bg-success">
+                    <i class="fa-light fa-display-chart-up-circle-currency"></i>
+                </span><br><br>
+                <h4>İstatistikler</h4>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

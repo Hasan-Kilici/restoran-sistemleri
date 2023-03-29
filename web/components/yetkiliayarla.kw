@@ -1,0 +1,11 @@
+<div class="container">
+    <form method="POST" action="/add/worker">
+        <input type="text" id="isim" name="isim" reqired>
+        <input type="email" id="email" name="email" required>
+        <input type="text" id="sifre" name="sifre" required>
+        <select id="yetki" name="yetki">
+            <option value="3">Patron</option>
+        </select>
+        <input type="submit">
+    </form>
+</div>

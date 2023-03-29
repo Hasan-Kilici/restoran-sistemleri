@@ -1,0 +1,33 @@
+<style>
+        canvas.drawing, canvas.drawingBuffer {
+            position: absolute;
+            left: 0;
+            top: 0;
+           border-radius:16px;
+        }
+</style>
+<button style="margin-top:2vh;" type="button" class="btn btn-success" onclick="start()"data-bs-toggle="modal" data-bs-target="#myModal">
+Tarama yap
+</button>
+
+<div class="modal" id="myModal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+ <div id="scanner-container"><center></center></div>
+<p id="result"></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

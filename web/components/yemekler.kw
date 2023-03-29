@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <div class="card mb-3">
+        <div class="card-header">
+            <h2>Yemek - İçecek ekle</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/add/food" enctype="multipart/form-data">
+                <label>Yemek adı</label>
+                <input type="text" class="form-control" id="name" name="name">
+                <label>Fiyat</label>
+                <input type="number" class="form-control" id="price" name="price">
+                <label>Fotoğraf</label>
+                <input type="file" name="file" class="form-control" id="file" required>
+                <input type="submit" class="btn btn-dark mt-3">
+            </form>
+        </div>      
+    </div>
+    <div id="yemekler" class="row justify-content-stretch">
+
+    </div>
+</div>

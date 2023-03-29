@@ -1,0 +1,4 @@
+0,token,username,email,password,perms
+1,admintoken,admin,admin@gmail.com,$2a$10$wLhRewbzaCpgIkP0KlzxPO8ne3pJP/9nKiKrlm8ulrpuXOCPvxNKm,1>2>3
+2,admintoken2,admin,admin2@gmail.com,$2a$10$wLhRewbzaCpgIkP0KlzxPO8ne3pJP/9nKiKrlm8ulrpuXOCPvxNKm,1>2>3
+4,fdsfs,6kKsiSkGpKFoyjnJ,kilicihasan42@gmail.com,$2a$10$OOfQW8.SmN2B97Ws0JZ5jeX6dApSdGePpw4RDjQhvNq1/mtUEfNwm,3
